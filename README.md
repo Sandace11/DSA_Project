@@ -16,6 +16,6 @@ and also script for linux (python comes to mind).
 
 ### Contributors:
 @pranjalpokharel7\
-@Sandace11
+@Sandace11\
 @UdeshyaDhungana
 
