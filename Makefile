@@ -3,16 +3,18 @@ source_dir = source
 build_dir = build
 
 # add all source files here
-source_files = $(source_dir)/main.cpp
+source_files = main.cpp
 
 # build file name, default here is app
-build_file = ./app
+build_file = app
 
 # compiler, change here if you have a different compiler
 cc = g++
 
-# SDL flags for linux, add lSDL2_image, lSDL2_ttf and others here
-sdl_flags_linux = -lSDL2 
+# SDL flags for linux, sdl-config will determine what compiler/linker flags
+# are required, cflags will print compiler flags, libs will prink linker flags
+sdl_flags_linux = -lSDL2 -lSDL2_image
+# `sdl-config --cflags --libs`
 
 # default entry target is build_program, remove the @ symbol if you want to 
 # see the command on the command line
@@ -21,7 +23,7 @@ build_program:
 
 # $ make run -> to run the build/executable
 run: build_program
-	@cd $(build_dir) && $(build_file)
+	@$(build_file)
 
 reset:
 	rm -rf $(build_dir)/*
