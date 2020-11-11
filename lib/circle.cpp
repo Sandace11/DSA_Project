@@ -2,14 +2,18 @@
 #include <SDL2/SDL.h>
 
 // constructors and destructors
-Circle::Circle(int x, int y, int r):centre_x(x), centre_y(y),radius(r){}
+Circle::Circle(int x, int y, int r, int s_width, SDL_Color s_color){
+  centre_x = x; centre_y = y;
+  radius = r;
+  stroke_width = s_width;
+  stroke_color = s_color;
+}
 Circle::Circle(){}
 Circle::~Circle(){}
 
 // setters
 void Circle::set_center(int x, int y){ centre_x = x; centre_y = y; }
 void Circle::set_radius(int r) { radius = r; }
-void Circle::set_fill(SDL_Color color){ fill_color = color; } 
 void Circle::set_stroke(SDL_Color color, int width = 0){
   stroke_color = color; 
   stroke_width = width;
@@ -78,8 +82,4 @@ void Circle::render_circle_outline(SDL_Renderer *renderer){
     stroke_width--;
   }
   stroke_width = temp;
-}
-
-void Circle::render_circle_fill(SDL_Renderer* renderer){
-  
 }
