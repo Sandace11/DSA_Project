@@ -79,3 +79,7 @@ void Circle::render_circle_outline(SDL_Renderer *renderer){
   }
   stroke_width = temp;
 }
+
+void Circle::render_circle_fill(SDL_Renderer* renderer){
+  
+}
