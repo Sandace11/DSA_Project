@@ -3,7 +3,7 @@ source_dir = source
 build_dir = build
 
 # add all source files here
-source_files = main.cpp ./includes/quick_sort.cpp
+source_files = main.cpp ./includes/quick_sort.cpp ./lib/color.cpp
 
 # build file name, default here is app
 build_file = app

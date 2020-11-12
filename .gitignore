@@ -1,0 +1,5 @@
+.vscode
+Makefile
+*.md
+build/app
+.gitignore

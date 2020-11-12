@@ -7,6 +7,9 @@
 #include <ctime>
 
 #include "./quick_sort.h"
+#include "../lib/color.h"
+
+#define PI 3.14159265358979323846
 
 namespace sort_window{
     // window properties
@@ -18,28 +21,27 @@ namespace sort_window{
 
 namespace sort_params {
     // sorting array rendering properties
-    const int MULTIPLIER = 10;
-    int random_value_array[sort_window::SCREEN_WIDTH/MULTIPLIER];
-    SDL_Rect rects[sort_window::SCREEN_WIDTH/MULTIPLIER];
+	const float INCREMENTS = 1;
+	const int RADIUS = 250;
+	const int NO_OF_VALUES = 360 / INCREMENTS;
+    int random_color_values[NO_OF_VALUES];
 }
 
-bool initialize_window() {
-	srand(time(NULL));
-
-	for(int i = 0; i < sort_window::SCREEN_WIDTH/sort_params::MULTIPLIER; i++) {
-		sort_params::random_value_array[i] = rand() % ((sort_window::SCREEN_HEIGHT) - 10 + 1) + 10;
+bool initialize() {
+	srand(time(nullptr));
+	
+	//Assigning random values to random_color_values array
+	for(int i = 0; i < 360 / sort_params::INCREMENTS; i++) {
+        sort_params::random_color_values[i] = rand() % (359 + 1);
 	}
 
-	for(int i = 0; i < sort_window::SCREEN_WIDTH/sort_params::MULTIPLIER; i++) {
-		sort_params::rects[i] = { i * sort_params::MULTIPLIER, sort_window::SCREEN_HEIGHT -
-			sort_params::random_value_array[i], 7, sort_params::random_value_array[i]};
-	}
-
+	//Initializing SDL
 	if(SDL_Init(SDL_INIT_VIDEO) < 0) {
 		printf("Failed to initialize : %s", SDL_GetError());
 		return false;
 	} 
 
+	//Setting texture filtering to linear
 	if( !SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "1" ) )
 	{
 		printf( "Warning: Linear texture filtering not enabled!" );
@@ -73,39 +75,39 @@ void close_window() {
 	SDL_Quit();
 }
 
-void render(int pivot_index) {
-	SDL_SetRenderDrawColor( sort_window::renderer, 0xFF, 0xFF, 0xFF, 0xFF );
-	SDL_RenderClear( sort_window::renderer );
-	SDL_SetRenderDrawColor( sort_window::renderer, 0x00, 0x00, 0x00, 0xFF );		
-	for(int i = 0; i < sort_window::SCREEN_WIDTH/sort_params::MULTIPLIER; i++) {	
-		if(i == pivot_index) 
-			SDL_SetRenderDrawColor( sort_window::renderer, 0x00, 0xFF, 0x00, 0xFF );
-		else 
-			SDL_SetRenderDrawColor( sort_window::renderer, 0x00, 0x00, 0x00, 0xFF );
 
-		SDL_RenderFillRect( sort_window::renderer, &(sort_params::rects[i]) );
+void render() {
+	SDL_SetRenderDrawColor( sort_window::renderer, 0x00, 0x00, 0x00, 0xFF );
+	SDL_RenderClear( sort_window::renderer);	
+	for(float ang = 0; ang <= 360 - sort_params::INCREMENTS; ang += sort_params::INCREMENTS) {
+		int x = sort_params::RADIUS * cos(ang * (PI / 180.0)) + sort_window::SCREEN_WIDTH / 2;
+		int y = sort_params::RADIUS * sin(ang * (PI / 180.0)) + sort_window::SCREEN_HEIGHT / 2;
+		int v = ang / sort_params::INCREMENTS;	
+		SDL_Color color = convert_HSL_to_RGB(sort_params::random_color_values[v], 100, 50);
+		SDL_SetRenderDrawColor( sort_window::renderer, color.r, color.g, color.b, color.a);
+		SDL_RenderDrawLine(sort_window::renderer, sort_window::SCREEN_WIDTH/2, sort_window::SCREEN_HEIGHT/2, x, y);
 	}
+
 	SDL_RenderPresent(sort_window::renderer);
-	SDL_Delay(20);
+	SDL_Delay(10);
+
 }
 
-void swap(SDL_Rect arr[], int a, int b) {
-	int tempY = arr[a].y;
-	int tempH = arr[a].h;
-	arr[a].h = arr[b].h;
-	arr[a].y = arr[b].y;
-	arr[b].h = tempH;
-	arr[b].y = tempY;
+
+void swap(int arr[], int a, int b) {
+	int temp = arr[a];
+	arr[a] = arr[b];
+	arr[b] = temp;
 } 
 
-int partition(SDL_Rect arr[], int start, int end, int pivot_index) {
-	int pivot = arr[pivot_index].h;
+int partition(int arr[], int start, int end, int pivot_index) {
+	int pivot = arr[pivot_index];
 	while(start <= end) {
-		while(arr[start].h < pivot) {
+		while(arr[start] < pivot) {
 			start++;
 		}
 
-		while(arr[end].h > pivot) {
+		while(arr[end] > pivot) {
 			end--;
 		}
 
@@ -113,14 +115,14 @@ int partition(SDL_Rect arr[], int start, int end, int pivot_index) {
 			swap(arr, start, end);
 			start++;
 			end--;
-			render(pivot_index);
+			render();
 		}
 	}
 	return start;
 
 }
 
-void quick_sort(SDL_Rect arr[], int start, int end) {
+void quick_sort(int arr[], int start, int end) {
 	if(start >= end) {
 		return;
 	}
@@ -131,7 +133,7 @@ void quick_sort(SDL_Rect arr[], int start, int end) {
 }
 
 void visualize_quick_sort(){
-	if(initialize_window()) {
+	if(initialize()) {
 		bool quit = false;
 		SDL_Event e;
 
@@ -144,16 +146,11 @@ void visualize_quick_sort(){
 			}
 
 			if (!sorted){
-				quick_sort(sort_params::rects, 0, sort_window::SCREEN_WIDTH/sort_params::MULTIPLIER - 1);
+				quick_sort(sort_params::random_color_values, 0, 360 / sort_params::INCREMENTS - 1);
 				sorted = true;
 			}
-			SDL_SetRenderDrawColor( sort_window::renderer, 0xFF, 0xFF, 0xFF, 0xFF );
-			SDL_RenderClear( sort_window::renderer );
-			SDL_SetRenderDrawColor( sort_window::renderer, 0x00, 0xFF, 0x00, 0xFF );		
-			for(int i = 0; i < sort_window::SCREEN_WIDTH/sort_params::MULTIPLIER; i++) {		
-				SDL_RenderFillRect( sort_window::renderer, &(sort_params::rects[i]) );
-			}
-			SDL_RenderPresent(sort_window::renderer);
+
+			render();
 		}
 	}
 	close_window();
