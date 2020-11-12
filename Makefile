@@ -3,7 +3,7 @@ source_dir = source
 build_dir = build
 
 # add all source files here
-source_files = main.cpp ./includes/quick_sort.cpp
+source_files = main.cpp ./includes/quick_sort.cpp ./includes/huffman.cpp
 
 # build file name, default here is app
 build_file = app
@@ -13,7 +13,7 @@ cc = g++
 
 # SDL flags for linux, sdl-config will determine what compiler/linker flags
 # are required, cflags will print compiler flags, libs will prink linker flags
-sdl_flags_linux = -lSDL2 -lSDL2_image
+sdl_flags_linux = -lSDL2
 
 # default entry target is build_program, remove the @ symbol if you want to 
 # see the command on the command line

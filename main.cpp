@@ -1,5 +1,6 @@
 #include <iostream>
 #include "./includes/quick_sort.h"
+#include "./includes/huffman.h"
 
 int main(int args, char** argv){
   char ch;
@@ -12,7 +13,7 @@ int main(int args, char** argv){
       visualize_quick_sort();
       break;
     case '2':
-      std::cout << "Huffman Tree implementation ongoing!\n";
+      visualize_huffman_tree();
       break;
     default:
       std::cout <<"Please make sensible choices!\n";

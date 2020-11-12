@@ -138,7 +138,7 @@ void visualize_quick_sort(){
 		bool sorted = false;
 		while(!quit) {
 			while(SDL_PollEvent(&e) != 0) {
-				if(e.type == SDL_QUIT )  {
+				if(e.type == SDL_QUIT || SDL_KEYUP )  {
 					quit = true;
 				}
 			}
@@ -147,6 +147,7 @@ void visualize_quick_sort(){
 				quick_sort(sort_params::rects, 0, sort_window::SCREEN_WIDTH/sort_params::MULTIPLIER - 1);
 				sorted = true;
 			}
+
 			SDL_SetRenderDrawColor( sort_window::renderer, 0xFF, 0xFF, 0xFF, 0xFF );
 			SDL_RenderClear( sort_window::renderer );
 			SDL_SetRenderDrawColor( sort_window::renderer, 0x00, 0xFF, 0x00, 0xFF );		
