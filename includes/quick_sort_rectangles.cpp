@@ -1,11 +1,10 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_video.h>
 #include <SDL2/SDL_error.h>
-#include <iostream>
-#include <string>
 #include <cmath>
 #include <ctime>
 
+#include "../lib/color.h"
 #include "./quick_sort_rectangles.h"
 
 namespace sort_window_rects{
@@ -19,19 +18,20 @@ namespace sort_window_rects{
 namespace sort_params_rects {
 	// sorting array rendering properties
 	const int MULTIPLIER = 10;
-	int random_value_array[sort_window_rects::SCREEN_WIDTH/MULTIPLIER];
-	SDL_Rect rects[sort_window_rects::SCREEN_WIDTH/MULTIPLIER];
+	const int number_of_rects = sort_window_rects::SCREEN_WIDTH/MULTIPLIER;
+	int random_value_array[number_of_rects];
+	SDL_Rect rects[number_of_rects];
 }
 
 bool initialize_window_rects() {
 	srand(time(NULL));
 
-	for(int i = 0; i < sort_window_rects::SCREEN_WIDTH/sort_params_rects::MULTIPLIER; i++) {
+	for(int i = 0; i < sort_params_rects::number_of_rects; i++) {
 		sort_params_rects::random_value_array[i] = 
 			rand() % ((sort_window_rects::SCREEN_HEIGHT) - 10 + 1) + 10;
 	}
 
-	for(int i = 0; i < sort_window_rects::SCREEN_WIDTH/sort_params_rects::MULTIPLIER; i++) {
+	for(int i = 0; i < sort_params_rects::number_of_rects; i++) {
 		sort_params_rects::rects[i] = { i * sort_params_rects::MULTIPLIER, 
 			sort_window_rects::SCREEN_HEIGHT -	sort_params_rects::random_value_array[i], 
 			7, sort_params_rects::random_value_array[i]};
@@ -64,7 +64,7 @@ bool initialize_window_rects() {
 		printf( "Renderer could not be created! SDL Error: %s\n", SDL_GetError() );
 		return false;
 	}
-	SDL_SetRenderDrawColor( sort_window_rects::renderer, 0xFF, 0xFF, 0xFF, 0xFF );
+	SDL_SetRenderDrawColor( sort_window_rects::renderer, 0x12, 0x12, 0x12, 0xFF );
 
 	return true;
 }
@@ -77,19 +77,28 @@ void close_window_rects() {
 	SDL_Quit();
 }
 
-void render_rects(int pivot_index) {
-	SDL_SetRenderDrawColor( sort_window_rects::renderer, 0xFF, 0xFF, 0xFF, 0xFF );
+void render_rects(int pivot_index, bool sorted) {
+	SDL_SetRenderDrawColor( sort_window_rects::renderer, 0x12, 0x12, 0x12, 0xFF );
 	SDL_RenderClear( sort_window_rects::renderer );
-	SDL_SetRenderDrawColor( sort_window_rects::renderer, 0x00, 0x00, 0x00, 0xFF );		
-	for(int i = 0; i < sort_window_rects::SCREEN_WIDTH/sort_params_rects::MULTIPLIER; i++) {	
-		if(i == pivot_index) 
-			SDL_SetRenderDrawColor( sort_window_rects::renderer, 0x00, 0xFF, 0x00, 0xFF );
-		else 
-			SDL_SetRenderDrawColor( sort_window_rects::renderer, 0x00, 0x00, 0x00, 0xFF );
+	SDL_SetRenderDrawColor( sort_window_rects::renderer, 0xFF, 0xFF, 0xFF, 0xFF );		
+
+	double t_hue;
+	SDL_Color t_color;
+	for(int i = 0; i < sort_params_rects::number_of_rects; i++) {	
+		if(i == pivot_index && sorted == false) 
+			SDL_SetRenderDrawColor( sort_window_rects::renderer, 0xFF, 0xFF, 0xFF, 0xFF );
+		else{ 
+			t_hue = (sort_params_rects::rects[i].h - 10) * 360 / 590;
+			t_color = convert_HSL_to_RGB(t_hue, 55, 40);
+			SDL_SetRenderDrawColor( sort_window_rects::renderer, t_color.r, t_color.g, 
+					t_color.b, 0xFF );
+		}
 
 		SDL_RenderFillRect( sort_window_rects::renderer, &(sort_params_rects::rects[i]) );
 	}
-	SDL_RenderPresent(sort_window_rects::renderer);
+	if (!sorted) {
+		SDL_RenderPresent(sort_window_rects::renderer);
+	}
 	SDL_Delay(20);
 }
 
@@ -147,17 +156,15 @@ void visualize_quick_sort_rects(){
 				}
 			}
 
+			SDL_SetRenderDrawColor( sort_window_rects::renderer, 0x12, 0x12, 0x12, 0xFF );
+			SDL_RenderClear( sort_window_rects::renderer );
+
 			if (!sorted){
-				quick_sort_rects(sort_params_rects::rects, 0, sort_window_rects::SCREEN_WIDTH/sort_params_rects::MULTIPLIER - 1);
+				quick_sort_rects(sort_params_rects::rects, 0, sort_params_rects::number_of_rects - 1);
 				sorted = true;
 			}
-			SDL_SetRenderDrawColor( sort_window_rects::renderer, 0xFF, 0xFF, 0xFF, 0xFF );
-			SDL_RenderClear( sort_window_rects::renderer );
-			SDL_SetRenderDrawColor( sort_window_rects::renderer, 0x00, 0xFF, 0x00, 0xFF );		
-			for(int i = 0; i < sort_window_rects::SCREEN_WIDTH/sort_params_rects::MULTIPLIER; i++) {		
-				SDL_RenderFillRect( sort_window_rects::renderer,
-						&(sort_params_rects::rects[i]) );
-			}
+
+			render_rects(0, true);
 			SDL_RenderPresent(sort_window_rects::renderer);
 		}
 	}

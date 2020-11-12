@@ -8,7 +8,7 @@ bool initialize_window_rects();
 void close_window_rects();
 
 // all sorting related for color wheel
-void render_rects(int pivot_index);
+void render_rects(int pivot_index, bool sorted = false);
 void swap_rects(SDL_Rect arr[], int a, int b);
 int partition_rects(SDL_Rect arr[], int start, int end, int pivot_index);
 void quick_sort_rects(SDL_Rect arr[], int start, int end);
