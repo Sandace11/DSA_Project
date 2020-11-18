@@ -5,6 +5,7 @@
 
 // initializing and closing windows
 bool initialize_window_rects();
+void init_parameters_rects();
 void close_window_rects();
 
 // all sorting related for color wheel
