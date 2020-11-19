@@ -44,6 +44,11 @@ public:
     queue.pop_back();
     return next_item;
   }
+
+  int length(){
+    /* Returns length of priority queue (non-recursive) */
+    return queue.size();
+  }
 };
 
 /* This retard converts a string to Priority_Queue<Nodes> */

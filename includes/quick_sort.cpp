@@ -138,7 +138,7 @@ void visualize_quick_sort(){
 		bool sorted = false;
 		while(!quit) {
 			while(SDL_PollEvent(&e) != 0) {
-				if(e.type == SDL_QUIT || SDL_KEYUP )  {
+				if(e.type == SDL_QUIT || e.type == SDL_KEYUP )  {
 					quit = true;
 				}
 			}

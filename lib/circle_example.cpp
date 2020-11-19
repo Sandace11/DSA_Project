@@ -15,7 +15,6 @@ int main(){
   Circle c1(200,200,50);
 
   Circle c2(300,300,50);
-  c2.set_stroke(stroke, 2);
 
   grender = SDL_CreateRenderer(gwin, -1, SDL_RENDERER_ACCELERATED);
 
@@ -32,7 +31,7 @@ int main(){
     c2.render_circle_outline(grender);
 
     // update screen
-    SDL_RenderPresent(grender);
+    //SDL_RenderPresent(grender);
   }
 
   SDL_DestroyRenderer(grender);
