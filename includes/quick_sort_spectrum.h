@@ -5,11 +5,12 @@
 
 // initializing window & array values and closing windows
 bool initialize_spectrum();
+void init_parameters_spectrum();
 void close_window_spectrum();
 
 // all sorting related
 void render_spectrum(int pivot_index);
-void swap_spectrum(int arr[], int a, int b);
+void swap_spectrum(int *a, int *b);
 int partition_spectrum(int arr[], int start, int end, int pivot_index);
 void quick_sort_spectrum(int arr[], int start, int end);
 
