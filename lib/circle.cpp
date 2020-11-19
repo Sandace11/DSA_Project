@@ -82,5 +82,4 @@ void Circle::render_circle_outline(SDL_Renderer *renderer){
     stroke_width--;
   }
   stroke_width = temp;
-  SDL_RenderPresent(renderer);
 }

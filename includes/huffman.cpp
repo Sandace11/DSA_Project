@@ -1,6 +1,5 @@
 #include <SDL2/SDL.h>
 #include <iostream>
-#include <unistd.h>
 #include <math.h>
 
 #include "../lib/circle.h"
@@ -76,7 +75,6 @@ void print_queue() {
   for (int i = 0; i < huffman_data::g_queue->queue.size(); ++i) {
     std::cout << huffman_data::g_queue->queue[i]->data << '\n';
   }
-  usleep(3);
 }
 
 void clear_screen(){
@@ -151,10 +149,11 @@ void visualize_huffman_tree() {
       // wait for few seconds
       // process one branch
       // repeat
-      if ( !( huffman_data::g_queue->length() <= 1) ) {
-        render_priority_queue(huffman_data::g_queue);
-        // wait for few seconds
-        // combine two nodes(with least weight) into one tree
+      render_priority_queue(huffman_data::g_queue);
+      if (huffman_data::g_queue->length() > 1) {
+        SDL_Delay(2000);
+        combine_once(huffman_data::g_queue);
+        std::cout << "Was here\n";
       }
 
       /*******************/
