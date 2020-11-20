@@ -1,15 +1,17 @@
 #include <SDL2/SDL.h>
 #include <iostream>
-#include <math.h>
 
 #include "../lib/circle.h"
+#include "../lib/line.h"
 #include "./huffman.h"
 #include "./huffman_data_structure.cpp"
+#include "./huffman_maths.cpp"
 #include "./quick_sort.h"
 
+
 namespace huffman_window {
-const int SCREEN_WIDTH = 1200;
-const int SCREEN_HEIGHT = 600;
+const int SCREEN_WIDTH = 1366;
+const int SCREEN_HEIGHT = 768;
 SDL_Window *window = NULL;
 SDL_Renderer *renderer = NULL;
 } // namespace huffman_window
@@ -35,7 +37,7 @@ bool initialize_huffman_window() {
                        SDL_WINDOWPOS_UNDEFINED, huffman_window::SCREEN_WIDTH,
                        huffman_window::SCREEN_HEIGHT, SDL_WINDOW_RESIZABLE);
 
-  if (huffman_window::window == nullptr) {
+  if (huffman_window::window == NULL) {
     printf("Failed to create window : %s", SDL_GetError());
     return false;
   }
@@ -43,7 +45,7 @@ bool initialize_huffman_window() {
   huffman_window::renderer =
       SDL_CreateRenderer(huffman_window::window, -1, SDL_RENDERER_ACCELERATED);
 
-  if (huffman_window::renderer == nullptr) {
+  if (huffman_window::renderer == NULL) {
     printf("Renderer could not be created! SDL Error: %s\n", SDL_GetError());
     return false;
   }
@@ -56,9 +58,9 @@ bool initialize_huffman_window() {
 void close_huffman_window() {
   // TODO: This function also needs to free all the pointers of data structure
   SDL_DestroyWindow(huffman_window::window);
-  huffman_window::window = nullptr;
+  huffman_window::window = NULL;
   SDL_DestroyRenderer(huffman_window::renderer);
-  huffman_window::renderer = nullptr;
+  huffman_window::renderer = NULL;
   SDL_Quit();
 }
 
@@ -88,16 +90,33 @@ void update_screen(){
 
 void render_node(Node *node, int depth, int x_coordinate, double bending_angle) {
   // Render node
-  Circle this_node = Circle(x_coordinate, 100 + depth * 60, 25);
+  double y_coordinate = 100 + depth * 60;
+  Circle this_node = Circle(x_coordinate, y_coordinate, 13);
   this_node.render_circle_outline(huffman_window::renderer);
+
   if (!node->is_leaf()) {
     //Render right and left child
     // Calculate position for left child and render it
     // child_x = x_coordinate + (60) * (tan(bending_angle/2))
     // child_y = y_coordinate + 60
-    render_node(node->left, depth+1, x_coordinate - 60 * tan(bending_angle/2), bending_angle/2);
+    double child_delta_x = 60 * tan(to_rad(bending_angle/2));
+    double left_child_x = x_coordinate - child_delta_x;
+    double children_y = 100 + (depth + 1) * 60;
+    double right_child_x = x_coordinate + child_delta_x;
+
+    //Draw lines and node (left)
+    Pair left_line_start = parent_line_intersection(x_coordinate, y_coordinate, left_child_x, children_y, 13, "left");
+    Pair left_line_end = child_line_intersection(x_coordinate, y_coordinate, left_child_x, children_y, 13, "left");
+    Line left_line = Line(left_line_start.x, left_line_start.y, left_line_end.x, left_line_end.y);
+    left_line.render_line(huffman_window::renderer);
+    render_node(node->left, depth+1, left_child_x, 0.7 * bending_angle);
+
     // Calculate position for right child and render it
-    render_node(node->right, depth+1, x_coordinate + 60 * tan(bending_angle/2), bending_angle/2);
+    Pair right_line_start = parent_line_intersection(x_coordinate, y_coordinate, right_child_x, children_y, 13, "right");
+    Pair right_line_end = child_line_intersection(x_coordinate, y_coordinate, right_child_x, children_y, 13, "right");
+    Line right_line = Line(right_line_start.x, right_line_start.y, right_line_end.x, right_line_end.y);
+    right_line.render_line(huffman_window::renderer);
+    render_node(node->right, depth+1, right_child_x, 0.7 * bending_angle);
   }
 }
 
@@ -111,8 +130,7 @@ void render_priority_queue(Priority_Queue *priority_q) {
 
   int gap = huffman_window::SCREEN_WIDTH / (priority_q->length() + 1);
   int bending_angle =
-      -10 * (priority_q->length()) +
-      160; // Bending angle is the angle between lines connecting two children
+      -10 * (priority_q->length()) + 160; // Bending angle is the angle between lines connecting two children
   for (int i = 0; i < priority_q->length(); ++i) {
     /* Calculate x coordinate of given node */
     // x_coor = gap (i + 1)
@@ -151,7 +169,7 @@ void visualize_huffman_tree() {
       // repeat
       render_priority_queue(huffman_data::g_queue);
       if (huffman_data::g_queue->length() > 1) {
-        SDL_Delay(2000);
+        SDL_Delay(3000);
         combine_once(huffman_data::g_queue);
         std::cout << "Was here\n";
       }
