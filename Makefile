@@ -2,9 +2,10 @@
 source_dir = source
 build_dir = build
 includes_dir = includes
+lib_dir = lib
 
 # add all source files here
-source_files = main.cpp ./lib/color.cpp $(includes_dir)/*.cpp ./lib/circle.cpp ./lib/line.cpp
+source_files = main.cpp $(includes_dir)/*.cpp $(lib_dir)/*.cpp
 
 # build file name, default here is app
 build_file = app

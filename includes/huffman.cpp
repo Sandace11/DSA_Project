@@ -4,10 +4,8 @@
 #include "../lib/circle.h"
 #include "../lib/line.h"
 #include "./huffman.h"
-#include "./huffman_data_structure.cpp"
-#include "./huffman_maths.cpp"
-#include "./quick_sort.h"
-
+#include "./huffman_data_structure.h"
+#include "./huffman_maths.h"
 
 namespace huffman_window {
 const int SCREEN_WIDTH = 1366;
@@ -177,7 +175,6 @@ void visualize_huffman_tree() {
       if (huffman_data::g_queue->length() > 1) {
         SDL_Delay(3000);
         combine_once(huffman_data::g_queue);
-        std::cout << "Was here\n";
       }
 
       /*******************/
