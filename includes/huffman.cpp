@@ -88,9 +88,14 @@ void update_screen(){
   SDL_RenderPresent(huffman_window::renderer);
 }
 
+double get_y_coords_from_depth(int depth){
+  double y_scale_factor = 50 + 15 * huffman_data::g_queue->length();
+  return 100 + (depth + 1) * y_scale_factor;
+}
+
 void render_node(Node *node, int depth, int x_coordinate, double bending_angle) {
   // Render node
-  double y_coordinate = 100 + depth * 60;
+  double y_coordinate = get_y_coords_from_depth(depth);
   Circle this_node = Circle(x_coordinate, y_coordinate, 13);
   this_node.render_circle_outline(huffman_window::renderer);
 
@@ -101,7 +106,8 @@ void render_node(Node *node, int depth, int x_coordinate, double bending_angle) 
     // child_y = y_coordinate + 60
     double child_delta_x = 60 * tan(to_rad(bending_angle/2));
     double left_child_x = x_coordinate - child_delta_x;
-    double children_y = 100 + (depth + 1) * 60;
+
+    double children_y = get_y_coords_from_depth(depth+1);
     double right_child_x = x_coordinate + child_delta_x;
 
     //Draw lines and node (left)
@@ -130,7 +136,7 @@ void render_priority_queue(Priority_Queue *priority_q) {
 
   int gap = huffman_window::SCREEN_WIDTH / (priority_q->length() + 1);
   int bending_angle =
-      -10 * (priority_q->length()) + 160; // Bending angle is the angle between lines connecting two children
+      -20 * (priority_q->length()) + 170; // Bending angle is the angle between lines connecting two children
   for (int i = 0; i < priority_q->length(); ++i) {
     /* Calculate x coordinate of given node */
     // x_coor = gap (i + 1)
