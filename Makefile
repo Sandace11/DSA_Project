@@ -15,7 +15,7 @@ cc = g++
 
 # SDL flags for linux, sdl-config will determine what compiler/linker flags
 # are required, cflags will print compiler flags, libs will prink linker flags
-sdl_flags_linux = -lSDL2
+sdl_flags_linux = -lSDL2 -lSDL2_ttf
 
 # default entry target is build_program, remove the @ symbol if you want to 
 # see the command on the command line

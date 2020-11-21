@@ -1,4 +1,5 @@
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 #include <iostream>
 
 #include "../lib/circle.h"
@@ -6,6 +7,8 @@
 #include "./huffman.h"
 #include "./huffman_data_structure.h"
 #include "./huffman_maths.h"
+
+#define RADIUS 15
 
 namespace huffman_window {
 const int SCREEN_WIDTH = 1366;
@@ -48,6 +51,11 @@ bool initialize_huffman_window() {
     return false;
   }
 
+  if (TTF_Init() == -1){
+    printf("SDL_ttf could not be initialized!");
+    return false;
+  }
+
   SDL_SetRenderDrawColor(huffman_window::renderer, 0xFF, 0xFF, 0xFF, 0xFF);
 
   return true;
@@ -59,6 +67,8 @@ void close_huffman_window() {
   huffman_window::window = NULL;
   SDL_DestroyRenderer(huffman_window::renderer);
   huffman_window::renderer = NULL;
+
+  TTF_Quit();
   SDL_Quit();
 }
 
@@ -94,7 +104,7 @@ double get_y_coords_from_depth(int depth){
 void render_node(Node *node, int depth, int x_coordinate, double bending_angle) {
   // Render node
   double y_coordinate = get_y_coords_from_depth(depth);
-  Circle this_node = Circle(x_coordinate, y_coordinate, 13);
+  Circle this_node = Circle(x_coordinate, y_coordinate, RADIUS, 10);
   this_node.render_circle_outline(huffman_window::renderer);
 
   if (!node->is_leaf()) {
@@ -109,15 +119,15 @@ void render_node(Node *node, int depth, int x_coordinate, double bending_angle) 
     double right_child_x = x_coordinate + child_delta_x;
 
     //Draw lines and node (left)
-    Pair left_line_start = parent_line_intersection(x_coordinate, y_coordinate, left_child_x, children_y, 13, "left");
-    Pair left_line_end = child_line_intersection(x_coordinate, y_coordinate, left_child_x, children_y, 13, "left");
+    Pair left_line_start = parent_line_intersection(x_coordinate, y_coordinate, left_child_x, children_y, RADIUS, "left");
+    Pair left_line_end = child_line_intersection(x_coordinate, y_coordinate, left_child_x, children_y, RADIUS, "left");
     Line left_line = Line(left_line_start.x, left_line_start.y, left_line_end.x, left_line_end.y);
     left_line.render_line(huffman_window::renderer);
     render_node(node->left, depth+1, left_child_x, 0.7 * bending_angle);
 
     // Calculate position for right child and render it
-    Pair right_line_start = parent_line_intersection(x_coordinate, y_coordinate, right_child_x, children_y, 13, "right");
-    Pair right_line_end = child_line_intersection(x_coordinate, y_coordinate, right_child_x, children_y, 13, "right");
+    Pair right_line_start = parent_line_intersection(x_coordinate, y_coordinate, right_child_x, children_y, RADIUS, "right");
+    Pair right_line_end = child_line_intersection(x_coordinate, y_coordinate, right_child_x, children_y, RADIUS, "right");
     Line right_line = Line(right_line_start.x, right_line_start.y, right_line_end.x, right_line_end.y);
     right_line.render_line(huffman_window::renderer);
     render_node(node->right, depth+1, right_child_x, 0.7 * bending_angle);
