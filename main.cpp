@@ -1,6 +1,7 @@
 #include <iostream>
 #include "./includes/quick_sort_rectangles.h"
 #include "./includes/quick_sort_spectrum.h"
+#include "./includes/huffman.h"
 
 int main(int args, char** argv){
   char ch = '1';
@@ -19,7 +20,7 @@ int main(int args, char** argv){
         visualize_quick_sort_spectrum();      
         break;
       case '3':
-        std::cout << "Huffman Tree implementation ongoing!\n";
+        visualize_huffman_tree();
         break;
       case '4':
         std::cout << "Thank you for testing our program!\n";
