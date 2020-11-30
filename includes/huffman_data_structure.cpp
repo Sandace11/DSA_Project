@@ -12,7 +12,7 @@ Node::Node(unsigned frequency, char data) {
 }
 
 bool Node::operator>(Node const &nod) {
-  return (this->frequency > nod.frequency);
+  return (this->frequency >= nod.frequency);
 }
 
 bool Node::is_leaf() { return !(this->left or this->right); }

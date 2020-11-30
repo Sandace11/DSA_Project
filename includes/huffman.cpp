@@ -104,7 +104,7 @@ double get_y_coords_from_depth(int depth){
 void render_node(Node *node, int depth, int x_coordinate, double bending_angle) {
   // Render node
   double y_coordinate = get_y_coords_from_depth(depth);
-  Circle this_node = Circle(x_coordinate, y_coordinate, RADIUS, 10);
+  Circle this_node = Circle(x_coordinate, y_coordinate, RADIUS, node->frequency, node->data);
   this_node.render_circle_outline(huffman_window::renderer);
 
   if (!node->is_leaf()) {
