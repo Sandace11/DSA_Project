@@ -106,6 +106,7 @@ void Circle::render_circle_outline(SDL_Renderer *renderer){
   text_box.x = centre_x - radius/2;
   text_box.y = centre_y - radius/2;
   SDL_RenderCopy(renderer, font_texture, nullptr, &text_box);
+  SDL_DestroyTexture(font_texture);
 }
 
 SDL_Texture* Circle::load_font(SDL_Renderer* renderer, const char* font_path, 

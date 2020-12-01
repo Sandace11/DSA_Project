@@ -14,7 +14,7 @@ Line::Line(int sx, int sy, int ex, int ey, int t, SDL_Color color){
   // default arrow length is 10, change parameters here for now
   arrow_x = (start_x + end_x) / 2;
   arrow_y = (start_y + end_y) / 2;
-  arrow_length = 20;
+  arrow_length = 10;
 }
 
 // setters
@@ -66,19 +66,24 @@ void Line::render_line(SDL_Renderer* renderer){
   double magnitude = sqrt((pow(end_x-start_x, 2)) + pow(end_y-start_y, 2));
   double uvec_x = multiplier * (end_x - start_x)/magnitude;
   double uvec_y = multiplier * (end_y - start_y)/magnitude;
+  //This retarded graphics library uses a coordinate system where y axis is reversed
+  //Who does that?
+  //
+
 
   //Turn that vector by 150degrees in clockwise and anti-c/w direction
   //We're setting it to 30 degrees for now
-  double dx = (-0.866) * uvec_x + (-0.5) * uvec_y;
+  double d1_x = (-0.866) * uvec_x + (-0.5) * uvec_y;
   double d1_y = (0.5) * uvec_x + (-0.866) * uvec_y;
 
+  double d2_x = (-0.866) * uvec_x + 0.5 * uvec_y;
   double d2_y = (-0.5) * uvec_x + (-0.866) * uvec_y;
 
   double mid_x = (start_x + end_x)/2;
   double mid_y = (start_y + end_y)/2;
 
-  p1_x = mid_x + arrow_length * dx;
-  p2_x = p1_x;
+  p1_x = mid_x + arrow_length * d1_x;
+  p2_x = mid_x + arrow_length * d2_x;
   p1_y = mid_y + arrow_length * d1_y;
   p2_y = mid_y + arrow_length * d2_y;
 

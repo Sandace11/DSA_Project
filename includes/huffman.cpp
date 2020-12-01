@@ -8,7 +8,7 @@
 #include "./huffman_data_structure.h"
 #include "./huffman_maths.h"
 
-#define RADIUS 15
+#define RADIUS 20
 
 namespace huffman_window {
 const int SCREEN_WIDTH = 1366;
