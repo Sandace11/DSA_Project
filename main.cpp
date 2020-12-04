@@ -3,6 +3,14 @@
 #include "./includes/quick_sort_spectrum.h"
 #include "./includes/huffman.h"
 
+inline void print_sort_instructions(){
+  std::cout << "\nNote - Sorting Instructions:\n\
+    <space> to pause the sorting\n\
+    <right-arrow> to speed up the visualization\n\
+    <left-arrow> to slow down the visualization\n\
+    <R> to reset the sort items\n";
+}
+
 int main(int args, char** argv){
   char ch = '1';
   std::cout <<"Enter a number:\n\
@@ -10,6 +18,7 @@ int main(int args, char** argv){
     2) Visualize Quick Sort (Color Spectrum)\n\
     3) Visualize Huffman Tree\n\
     4) Quit\n";
+  print_sort_instructions();
   while(ch){
     std::cin >> ch;
     switch(ch){

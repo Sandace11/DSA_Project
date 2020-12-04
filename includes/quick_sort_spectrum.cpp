@@ -41,7 +41,7 @@ void init_parameters_spectrum() {
 
 	sort_params_spectrum::sorted = false;
 	sort_params_spectrum::paused = false;
-	sort_params_spectrum::delay_rate = 50; // 50 milliseconds
+	sort_params_spectrum::delay_rate = 10; // 15 milliseconds
 
 	sort_window_spectrum::window_open = true;
 }

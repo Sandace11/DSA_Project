@@ -76,7 +76,7 @@ void get_string_from_user() {
   /* This function prompts user for input string */
   std::cout << "Enter the string: ";
   std::string user_string;
-  std::cin >> user_string;
+  std::getline(std::cin >> std::ws, user_string);
   huffman_data::g_queue = str_to_priority_queue(user_string);
 }
 
