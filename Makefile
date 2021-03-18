@@ -33,19 +33,26 @@ main.o: main.cpp ./includes/huffman.* \
 
 huffman.o: ./includes/huffman.*
 	@$(co) ./includes/huffman.cpp
-	quick_sort_rectangles.o: ./includes/quick_sort_rectangles.*
+
+quick_sort_rectangles.o: ./includes/quick_sort_rectangles.*
 	@$(co) ./includes/quick_sort_rectangles.cpp
-	quick_sort_spectrum.o: ./includes/quick_sort_spectrum.*
+
+quick_sort_spectrum.o: ./includes/quick_sort_spectrum.*
 	@$(co) ./includes/quick_sort_spectrum.cpp
-	color.o: ./lib/color.*
+
+color.o: ./lib/color.*
 	@$(co) ./lib/color.cpp
-	line.o: ./lib/line.*
+
+line.o: ./lib/line.*
 	@$(co) ./lib/line.cpp
-	circle.o: ./lib/circle.*
+
+circle.o: ./lib/circle.*
 	@$(co) ./lib/circle.cpp
-	huffman_data_structure.o: ./includes/huffman_data_structure.*
+
+huffman_data_structure.o: ./includes/huffman_data_structure.*
 	@$(co) ./includes/huffman_data_structure.cpp 
-	huffman_maths.o: ./includes/huffman_maths.*
+
+huffman_maths.o: ./includes/huffman_maths.*
 	@$(co) ./includes/huffman_maths.cpp
 
 # $ make run -> to run the build/executable
