@@ -50,6 +50,7 @@ Your final project structure should look something like this:
 ├── lib/                    # Custom files that fall under 'library'
 ├── screenshots/            # If and any screenshots for preview
 ├── main.cpp                # Entry point into the program
+├── init.sh                 # The initialization script
 ├── MakeFile                # MakeFile for compilation/build instructions
 └── README.md               # README file
 ```
