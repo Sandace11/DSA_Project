@@ -1,24 +1,22 @@
 # directories, must have 'build' and 'bin' folder in the root directory
-build_dir =build
-includes_dir =includes
-binary_dir =bin
-lib_dir =lib
+build_dir=build
+binary_dir=bin
+
+# binary file name, default here is app
+binary_file=app
 
 # add all source files here
-source_files =main.cpp $(includes_dir)/*.cpp $(lib_dir)/*.cpp
-object_files =$(build_dir)/main.o \
+source_files=main.cpp includes/*.cpp lib/*.cpp
+object_files=$(build_dir)/main.o \
 							$(build_dir)/circle.o $(build_dir)/color.o $(build_dir)/line.o \
 							$(build_dir)/quick_sort_spectrum.o \
 							$(build_dir)/quick_sort_rectangles.o \
 							$(build_dir)/huffman.o $(build_dir)/huffman_data_structure.o \
 							$(build_dir)/huffman_maths.o
 
-# binary file name, default here is app
-binary_file=app
-
 # compiler, change here if you have a different compiler
-cc =g++
-co =g++ -c
+cc=g++
+co=g++ -c
 
 # SDL flags for linux
 sdl_flags_linux =-lSDL2 -lSDL2_ttf
