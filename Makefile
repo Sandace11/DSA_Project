@@ -1,17 +1,20 @@
-# directories, must have 'build' folder in the root directory
+# directories, must have 'build' and 'bin' folder in the root directory
 build_dir =build
 includes_dir =includes
+binary_dir =bin
 lib_dir =lib
 
 # add all source files here
 source_files =main.cpp $(includes_dir)/*.cpp $(lib_dir)/*.cpp
-object_files =main.o \
-							circle.o color.o line.o \
-							quick_sort_spectrum.o quick_sort_rectangles.o \
-							huffman.o huffman_data_structure.o huffman_maths.o
+object_files =$(build_dir)/main.o \
+							$(build_dir)/circle.o $(build_dir)/color.o $(build_dir)/line.o \
+							$(build_dir)/quick_sort_spectrum.o \
+							$(build_dir)/quick_sort_rectangles.o \
+							$(build_dir)/huffman.o $(build_dir)/huffman_data_structure.o \
+							$(build_dir)/huffman_maths.o
 
-# build file name, default here is app
-build_file =app
+# binary file name, default here is app
+binary_file=app
 
 # compiler, change here if you have a different compiler
 cc =g++
@@ -23,42 +26,45 @@ sdl_flags_linux =-lSDL2 -lSDL2_ttf
 # default entry target is build_program, remove the @ symbol if you want to 
 # see the command on the command line
 
-app: $(object_files)
-	@$(cc) $(object_files) -o $(build_file) $(sdl_flags_linux) && \
-		mv $(build_file) $(build_dir)
+$(binary_dir)/$(binary_file): $(object_files)
+		@$(cc) $(object_files) -o $@ $(sdl_flags_linux)
 
-main.o: main.cpp ./includes/huffman.* \
+$(build_dir)/main.o: main.cpp ./includes/huffman.* \
 	./includes/quick_sort_spectrum.* \
 	./includes/quick_sort_rectangles.*
+	$(co) main.cpp -o $@
 
-huffman.o: ./includes/huffman.*
-	@$(co) ./includes/huffman.cpp
+$(build_dir)/huffman.o: ./includes/huffman.* ./includes/huffman_maths.* \
+	./includes/huffman_data_structure.* ./lib/circle.* ./lib/line.*
+	$(co) ./includes/huffman.cpp -o $@
 
-quick_sort_rectangles.o: ./includes/quick_sort_rectangles.*
-	@$(co) ./includes/quick_sort_rectangles.cpp
+$(build_dir)/quick_sort_rectangles.o: ./includes/quick_sort_rectangles.* \
+	./lib/color.h
+	$(co) ./includes/quick_sort_rectangles.cpp -o $@
 
-quick_sort_spectrum.o: ./includes/quick_sort_spectrum.*
-	@$(co) ./includes/quick_sort_spectrum.cpp
+$(build_dir)/quick_sort_spectrum.o: ./includes/quick_sort_spectrum.* \
+	./lib/color.*
+	$(co) ./includes/quick_sort_spectrum.cpp -o $@
 
-color.o: ./lib/color.*
-	@$(co) ./lib/color.cpp
+$(build_dir)/color.o: ./lib/color.*
+	$(co) ./lib/color.cpp -o $@
 
-line.o: ./lib/line.*
-	@$(co) ./lib/line.cpp
+$(build_dir)/line.o: ./lib/line.*
+	$(co) ./lib/line.cpp -o $@
 
-circle.o: ./lib/circle.*
-	@$(co) ./lib/circle.cpp
+$(build_dir)/circle.o: ./lib/circle.*
+	$(co) ./lib/circle.cpp -o $@
 
-huffman_data_structure.o: ./includes/huffman_data_structure.*
-	@$(co) ./includes/huffman_data_structure.cpp 
+$(build_dir)/huffman_data_structure.o: ./includes/huffman_data_structure.*
+	$(co) ./includes/huffman_data_structure.cpp -o $@
 
-huffman_maths.o: ./includes/huffman_maths.*
-	@$(co) ./includes/huffman_maths.cpp
+$(build_dir)/huffman_maths.o: ./includes/huffman_maths.*
+	$(co) ./includes/huffman_maths.cpp -o $@
 
-# $ make run -> to run the build/executable
-run: app 
-	@cd $(build_dir) && ./$(build_file)
+# $ make run -> to run the $(build_dir)/executable
+run: $(binary_dir)/$(binary_file)
+	@cd $(binary_dir) && ./$(binary_file)
 
 .PHONY : clean
 clean:
-	rm -f $(object_files) 
+	@cd $(build_dir) && rm -f $(object_files) && echo "All object files removed!"
