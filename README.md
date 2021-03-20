@@ -44,8 +44,8 @@ Your final project structure should look something like this:
 - Not Windows compatible for now, mostly due to path changes required for SDL.
 - Need to work on a script to auto-install all the required libraries.
 
-### Contributors:
-@pranjalpokharel7\
-@Sandace11\
-@UdeshyaDhungana
+### Primary Contributors:
+[@pranjalpokharel7](https://github.com/pranjalpokharel7)\
+[@Sandace11](https://github.com/Sandace11)\
+[@UdeshyaDhungana](https://github.com/UdeshyaDhungana)
 
